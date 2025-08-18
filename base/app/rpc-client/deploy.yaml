@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rpc-client
+spec:
+  template:
+    spec:
+      containers:
+        - name: rpc-client
+          image: rpc-client
+          command: ["fastapi", "run"]
+          args:
+            - "--host=$(API_HOST)"
+            - "--port=$(API_PORT)"
+            - "--workers=$(API_WORKERS)"
+          ports:
+            - containerPort: 8000
+              name: http
+          envFrom:
+            - configMapRef:
+                name: rpc-client
+            - secretRef:
+                name: rpc-client
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1000m
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
