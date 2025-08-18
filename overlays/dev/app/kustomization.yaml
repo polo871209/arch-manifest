@@ -8,5 +8,3 @@ images:
   newName: az871209/arch
   newTag: rpc-client-main
 - name: rpc-server
-  newName: az871209/arch
-  newTag: rpc-server-main
