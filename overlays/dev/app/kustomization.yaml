@@ -4,4 +4,6 @@ resources:
 - ../../base/app/
 images:
 - name: rpc-client
+  newName: docker.io/az871209/arch
 - name: rpc-server
+  newName: docker.io/az871209/arch
