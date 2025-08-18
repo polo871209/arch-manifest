@@ -6,4 +6,4 @@ resources:
 images:
 - name: rpc-migration
   newName: az871209/arch
-  newTag: rpc-server-main
+  newTag: rpc-migration-main
