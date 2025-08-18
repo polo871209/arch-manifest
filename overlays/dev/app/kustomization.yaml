@@ -1,0 +1,12 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+- ../../base/app/
+
+images:
+- name: rpc-client
+  newName: az871209/arch
+  newTag: rpc-client-main
+- name: rpc-server
+  newName: az871209/arch
+  newTag: rpc-server-main
