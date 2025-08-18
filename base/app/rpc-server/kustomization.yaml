@@ -1,8 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- configmap.yaml
-- deploy.yaml
-- secret.yaml
-- service.yaml
-- mesh.yaml
+  - deploy.yaml
+  - mesh.yaml
+  - service.yaml
+  - configmap.yaml
+  - secret.yaml
+labels:
+  - pairs:
+      app.kubernetes.io/name: rpc-server
+      app.kubernetes.io/component: server
+      app.kubernetes.io/part-of: arch
+      app.kubernetes.io/managed-by: kustomize
+    includeSelectors: true
+    includeTemplates: true

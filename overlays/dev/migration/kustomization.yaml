@@ -1,9 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-- ../../../base/app/migration/
-
+- ../../../../base/app/migration/
+labels:
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    environment: development
 images:
 - name: rpc-migration
-  newName: az871209/arch
-  newTag: rpc-migration-main
+  newName: localhost:5000/rpc-migration
+  newTag: "20250818104604"
+nameSuffix: "-20250818104604"

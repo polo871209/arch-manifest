@@ -1,7 +1,50 @@
-apiVersion: security.istio.io/v1beta1
-kind: PeerAuthentication
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
 metadata:
-  name: default
+  name: rpc-server
 spec:
-  mtls:
-    mode: STRICT
+  host: rpc-server
+  trafficPolicy:
+    tls:
+      mode: ISTIO_MUTUAL
+    connectionPool:
+      tcp:
+        maxConnections: 50
+        connectTimeout: 300ms
+        tcpKeepalive:
+          time: 30s
+          interval: 15s
+          probes: 5
+        idleTimeout: 30m
+      http:
+        http2MaxRequests: 1000
+        http1MaxPendingRequests: 1000
+        maxRequestsPerConnection: 0
+        idleTimeout: 5m
+        maxRetries: 3
+        h2UpgradePolicy: DEFAULT
+    loadBalancer:
+      simple: LEAST_REQUEST
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 1m
+      maxEjectionPercent: 50
+      splitExternalLocalOriginErrors: true
+      consecutiveLocalOriginFailures: 5
+---
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: rpc-server
+spec:
+  hosts:
+    - rpc-server
+  tcp:
+    - match:
+        - port: 50051
+      route:
+        - destination:
+            host: rpc-server.arch.svc.cluster.local
+            port:
+              number: 50051
