@@ -11,25 +11,22 @@ spec:
           command:
             - sh
             - -c
-            - until pg_isready -h $(DATABASE_HOST) -p 5432 -U $(DATABASE_USER); do echo waiting for postgres; sleep 2; done;
+            - until pg_isready -h $(DATABASE_HOST) -p $(DATABASE_PORT) -U $(DATABASE_USER); do echo waiting for postgres; sleep 2; done;
           env:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: rpc-migration
+                  name: rpc-server
                   key: DATABASE_PASSWORD
           envFrom:
-            - configMapRef:
-                name: rpc-migration
             - secretRef:
-                name: rpc-migration
+                name: rpc-server
       containers:
         - name: rpc-migration
           image: rpc-migration
-          command: ["/usr/local/bin/migration"]
+          command: ["goose"]
+          args: ["postgres", "$(DATABASE_URL)", "up"]
           envFrom:
-            - configMapRef:
-                name: rpc-migration
             - secretRef:
-                name: rpc-migration
+                name: rpc-server
       restartPolicy: OnFailure
