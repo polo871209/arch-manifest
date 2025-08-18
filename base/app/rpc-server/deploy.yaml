@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rpc-server
+spec:
+  template:
+    spec:
+      initContainers:
+        - name: wait-for-postgres
+          image: postgres:17
+          command:
+            - sh
+            - -c
+            - until pg_isready -h $(DATABASE_HOST) -p 5432 -U $(DATABASE_USER); do echo waiting for postgres; sleep 2; done;
+          env:
+            - name: PGPASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: rpc-server
+                  key: DATABASE_PASSWORD
+          envFrom:
+            - configMapRef:
+                name: rpc-server
+            - secretRef:
+                name: rpc-server
+      containers:
+        - name: rpc-server
+          image: rpc-server
+          command: ["/usr/local/bin/server"]
+          args:
+            - "--port=$(GRPC_PORT)"
+            - "--log-level=$(LOG_LEVEL)"
+            - "--log-format=$(LOG_FORMAT)"
+          ports:
+            - containerPort: 50051
+              name: grpc
+          envFrom:
+            - configMapRef:
+                name: rpc-server
+            - secretRef:
+                name: rpc-server
+          resources:
+            limits:
+              memory: 1Gi
+              cpu: 1000m
+          livenessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            tcpSocket:
+              port: 50051
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            timeoutSeconds: 5
+            successThreshold: 1
+            failureThreshold: 3
