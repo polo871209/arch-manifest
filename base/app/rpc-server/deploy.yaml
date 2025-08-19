@@ -3,8 +3,19 @@ kind: Deployment
 metadata:
   name: rpc-server
 spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: rpc-server
   template:
+    metadata: {}
     spec:
+      serviceAccountName: rpc-server
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        runAsGroup: 65534
+        fsGroup: 65534
       initContainers:
         - name: wait-for-postgres
           image: postgres:17
@@ -21,6 +32,19 @@ spec:
           envFrom:
             - secretRef:
                 name: rpc-server
+          resources:
+            limits:
+              memory: 128Mi
+              cpu: 100m
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop:
+                - ALL
       containers:
         - name: rpc-server
           image: rpc-server
@@ -41,6 +65,15 @@ spec:
             limits:
               memory: 1Gi
               cpu: 1000m
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 65534
+            runAsGroup: 65534
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: false
+            capabilities:
+              drop:
+                - ALL
           livenessProbe:
             tcpSocket:
               port: 50051
