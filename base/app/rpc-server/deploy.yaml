@@ -19,8 +19,6 @@ spec:
                   name: rpc-server
                   key: DATABASE_PASSWORD
           envFrom:
-            - configMapRef:
-                name: rpc-server
             - secretRef:
                 name: rpc-server
       containers:

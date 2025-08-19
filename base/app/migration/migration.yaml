@@ -13,24 +13,16 @@ spec:
           command:
             - sh
             - -c
-            - |
-              echo "Waiting for PostgreSQL to be ready..."
-              until pg_isready -h $(DATABASE_HOST) -p 5432 -U $(DATABASE_USER); do
-                echo "PostgreSQL is unavailable - sleeping"
-                sleep 2
-              done
-              echo "PostgreSQL is ready"
-          envFrom:
-            - configMapRef:
-                name: rpc-server
-            - secretRef:
-                name: rpc-server
+            - until pg_isready -h $(DATABASE_HOST) -p 5432 -U $(DATABASE_USER); do echo waiting for postgres; sleep 2; done;
           env:
             - name: PGPASSWORD
               valueFrom:
                 secretKeyRef:
                   name: rpc-server
                   key: DATABASE_PASSWORD
+          envFrom:
+            - secretRef:
+                name: rpc-server
       containers:
         - name: migration
           image: rpc-migration:latest
