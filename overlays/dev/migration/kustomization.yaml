@@ -9,6 +9,6 @@ labels:
     environment: development
 images:
 - name: rpc-migration
-  newName: localhost:5000/rpc-migration
-  newTag: "20250818104604"
-nameSuffix: "-20250818104604"
+  newName: docker.io/az871209/arch
+  newTag: rpc-migration-09ccd871723faadce8ffbfcb36a83b0012d19e46
+nameSuffix: -09ccd871723faadce8ffbfcb36a83b0012d19e46
