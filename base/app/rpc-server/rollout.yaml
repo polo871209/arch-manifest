@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rpc-server-rollout
+spec:
+  replicas: 3
+  workloadRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: rpc-server
+  strategy:
+    canary:
+      steps:
+        - setWeight: 20
+        - pause: {}
+        - setWeight: 50
+        - pause: {duration: 30s}
+        - setWeight: 100
+      canaryService: rpc-server-canary
+      stableService: rpc-server
