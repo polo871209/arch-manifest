@@ -1,14 +1,14 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - ../../../base/app/migration/
+- ../../../base/app/migration/
 labels:
-  - includeSelectors: true
-    includeTemplates: true
-    pairs:
-      environment: development
+- includeSelectors: true
+  includeTemplates: true
+  pairs:
+    environment: development
 images:
-  - name: rpc-migration
-    newName: docker.io/az871209/arch
-    newTag: rpc-migration-09ccd871723faadce8ffbfcb36a83b0012d19e46
-nameSuffix: -09ccd871723faadce8ffbfcb36a83b0012d19e46
+- name: rpc-migration
+  newName: docker.io/az871209/arch
+  newTag: rpc-migration-5590e2bc8541eb73447902e29ed7093ee334a1b3
+nameSuffix: -5590e2bc8541eb73447902e29ed7093ee334a1b3
