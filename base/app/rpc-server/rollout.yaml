@@ -6,6 +6,18 @@ spec:
   replicas: 3
   strategy:
     canary:
+      canaryService: rpc-server-canary
+      stableService: rpc-server
+      trafficRouting:
+        istio:
+          virtualService:
+            name: rpc-server
+            routes:
+              - primary
+          destinationRule:
+            name: rpc-server
+            canarySubsetName: canary
+            stableSubsetName: stable
       steps:
         - setWeight: 20
         - pause: {}

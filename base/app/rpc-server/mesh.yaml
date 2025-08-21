@@ -32,6 +32,13 @@ spec:
       maxEjectionPercent: 50
       splitExternalLocalOriginErrors: true
       consecutiveLocalOriginFailures: 5
+  subsets:
+    - name: stable
+      labels:
+        rollouts-pod-template-hash-stable: stable
+    - name: canary
+      labels:
+        rollouts-pod-template-hash-canary: canary
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
@@ -40,11 +47,14 @@ metadata:
 spec:
   hosts:
     - rpc-server
-  tcp:
-    - match:
-        - port: 50051
+  http:
+    - name: primary
       route:
         - destination:
-            host: rpc-server.arch.svc.cluster.local
-            port:
-              number: 50051
+            host: rpc-server
+            subset: stable
+          weight: 100
+        - destination:
+            host: rpc-server
+            subset: canary
+          weight: 0
