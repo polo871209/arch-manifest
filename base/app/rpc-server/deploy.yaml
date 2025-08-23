@@ -4,6 +4,7 @@ metadata:
   name: rpc-server
 spec:
   replicas: 0
+  revisionHistoryLimit: 0
   selector:
     matchLabels:
       app.kubernetes.io/name: rpc-server
