@@ -7,13 +7,3 @@ spec:
     - port: 50051
       targetPort: 50051
       name: grpc
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: rpc-server-canary
-spec:
-  ports:
-    - port: 50051
-      targetPort: 50051
-      name: grpc

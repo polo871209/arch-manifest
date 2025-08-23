@@ -6,8 +6,6 @@ spec:
   replicas: 3
   strategy:
     canary:
-      canaryService: rpc-server-canary
-      stableService: rpc-server
       trafficRouting:
         istio:
           virtualService:
