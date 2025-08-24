@@ -4,9 +4,9 @@ namespace: arch
 resources:
   - rpc-client
   - rpc-server
+  - utils
 labels:
   - pairs:
       project: arch
     includeSelectors: true
     includeTemplates: true
-

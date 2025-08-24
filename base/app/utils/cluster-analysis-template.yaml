@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/argoproj/argo-rollouts/refs/heads/master/docs/features/kustomize/rollout_cr_schema.json
+
+apiVersion: argoproj.io/v1alpha1
+kind: ClusterAnalysisTemplate
+metadata:
+  name: success-rate
+spec:
+  args:
+    - name: service_name
+    - name: prometheus_address
+      value: http://prometheus-server.observability.svc.cluster.local
+    - name: success_rate_threshold
+      value: "0.95"
+  metrics:
+    - name: success-rate
+      interval: 5m
+      successCondition: result[0] >= {{args.success_rate_threshold}}
+      failureLimit: 3
+      provider:
+        prometheus:
+          address: "{{args.prometheus_address}}"
+          query: |
+            sum(irate(istio_requests_total{reporter="destination",destination_service_name="{{args.service_name}}",response_code!~"5.*"}[5m])) / 
+            sum(irate(istio_requests_total{reporter="destination",destination_service_name="{{args.service_name}}"}[5m]))

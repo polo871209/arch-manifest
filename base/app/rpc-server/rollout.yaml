@@ -1,3 +1,5 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/argoproj/argo-rollouts/refs/heads/master/docs/features/kustomize/rollout_cr_schema.json
+
 apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
@@ -16,6 +18,14 @@ spec:
             name: rpc-server
             canarySubsetName: canary
             stableSubsetName: stable
+      analysis:
+        templates:
+          - templateName: success-rate
+            clusterScope: true
+        startingStep: 2
+        args:
+          - name: service_name
+            value: rpc-server
       steps:
         - setWeight: 20
         - pause: {}
