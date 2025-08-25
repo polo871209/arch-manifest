@@ -5,7 +5,7 @@ resources:
 images:
 - name: rpc-client
   newName: docker.io/az871209/arch
-  newTag: rpc-client-5590e2bc8541eb73447902e29ed7093ee334a1b3
+  newTag: rpc-client-177caa68716cce29b14956a1c4afe13ef01d7eda
 - name: rpc-server
   newName: docker.io/az871209/arch
-  newTag: rpc-server-4c9dba30c17b3ee90548a65e2467fb63d45d10bc
+  newTag: rpc-server-177caa68716cce29b14956a1c4afe13ef01d7eda
