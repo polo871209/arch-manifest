@@ -7,7 +7,6 @@ spec:
   revisionHistoryLimit: 0
   selector:
     matchLabels:
-      app.kubernetes.io/name: rpc-server
   template:
     metadata: {}
     spec:

@@ -3,9 +3,6 @@ kind: Deployment
 metadata:
   name: rpc-client
 spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: rpc-client
   template:
     metadata: {}
     spec:
