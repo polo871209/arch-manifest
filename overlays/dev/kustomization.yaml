@@ -8,4 +8,4 @@ images:
   newTag: rpc-client-1c69cba9fdb3d2f6e37deff98628e5005ced8fc1
 - name: rpc-server
   newName: docker.io/az871209/arch
-  newTag: rpc-server-576e4a044d5aa9e8beacfc6397c0c2e684b66895
+  newTag: rpc-server-b977c75870bf8538362c1ed6bead6bf969afd1c5
